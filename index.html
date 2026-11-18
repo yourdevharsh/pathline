@@ -111,10 +111,66 @@
     .timeline-scroll::-webkit-scrollbar { height: 9px; }
     .timeline-scroll::-webkit-scrollbar-track { background: transparent; margin: 0 18px; }
     .timeline-scroll::-webkit-scrollbar-thumb { background: #cbd7ce; border-radius: 99px; border: 2px solid rgba(255,255,255,.7); }
-    .timeline-track { display: flex; align-items: flex-start; gap: 54px; width: max-content; min-width: 100%; min-height: 360px; padding: 34px 34px 42px; }
+    .timeline-track { display: flex; align-items: flex-start; gap: 54px; width: max-content; min-width: 100%; min-height: 360px; padding: 52px 34px 42px; }
     .milestone-column { flex: 0 0 260px; width: 260px; position: relative; }
     .milestone-column::after { content: ""; height: 1px; width: 54px; position: absolute; top: 27px; left: 100%; background: var(--line-strong); z-index: 0; }
     .milestone-card { position: relative; z-index: 1; padding: 16px 16px 15px; border: 1px solid var(--line); border-radius: 15px; background: var(--surface); box-shadow: 0 4px 14px rgba(31,55,40,.035); min-height: 146px; }
+    .milestone-card.has-active-timer { border-color: #92bfa5; }
+
+    /* Timer styles */
+    .milestone-hover-timers {
+      position: absolute; bottom: calc(100% + 9px); left: 0; right: 0;
+      display: flex; flex-direction: column; gap: 6px; z-index: 10; pointer-events: auto;
+    }
+    .timer-hover-pill {
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+      padding: 6px 12px; border-radius: 99px; background: #ffffff;
+      border: 1.5px solid var(--accent); color: var(--accent-dark);
+      font-size: 11px; font-weight: 700;
+      box-shadow: 0 8px 22px rgba(29, 54, 40, .13), 0 2px 6px rgba(0,0,0,.04);
+      animation: timer-hover-bob 2.8s ease-in-out infinite alternate;
+      white-space: nowrap;
+    }
+    .timer-hover-pill .timer-pill-left { display: inline-flex; align-items: center; gap: 6px; }
+    .timer-hover-pill .timer-pill-left svg { width: 14px; height: 14px; flex-shrink: 0; }
+    .timer-hover-pill .timer-pill-source {
+      font-size: 9px; text-transform: uppercase; letter-spacing: .08em; font-weight: 800;
+      padding: 2px 7px; border-radius: 99px; background: var(--accent-soft); color: var(--accent-dark);
+    }
+    .timer-hover-pill.warning {
+      border-color: #d97706; color: #92400e; background: #fffdf9;
+      box-shadow: 0 8px 22px rgba(217, 119, 6, .14);
+    }
+    .timer-hover-pill.warning .timer-pill-source { background: #fef3c7; color: #92400e; }
+    .timer-hover-pill.danger {
+      border-color: var(--danger); color: var(--danger); background: #fff5f5;
+      box-shadow: 0 8px 22px rgba(184, 73, 73, .16);
+    }
+    .timer-hover-pill.danger .timer-pill-source { background: var(--danger-soft); color: var(--danger); }
+    @keyframes timer-hover-bob {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-4px); }
+    }
+
+    .node-timer-tag {
+      display: flex; align-items: center; gap: 6px; padding: 6px 9px; margin-top: 10px;
+      border-radius: 9px; font-size: 10px; font-weight: 650; line-height: 1.35;
+      border: 1px dashed #cad8ce; background: #f6f8f6; color: #55675b;
+    }
+    .node-timer-tag svg { width: 13px; height: 13px; flex-shrink: 0; }
+    .node-timer-tag.is-running { background: #eef7f1; border-color: #a4ceb2; color: var(--accent-dark); }
+    .node-timer-tag.is-completed { background: #f3f5f3; border-style: solid; border-color: #d4ded6; color: #7b8a80; }
+    .node-timers-stack { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
+    .node-timers-stack .node-timer-tag { margin-top: 0; }
+
+    .substep-timer-badge {
+      display: inline-flex; align-items: center; gap: 5px; padding: 3px 7px;
+      border-radius: 6px; font-size: 9px; font-weight: 750; margin-top: 5px;
+      border: 1px solid var(--accent); background: var(--accent-soft); color: var(--accent-dark);
+    }
+    .substep-timer-badge svg { width: 11px; height: 11px; flex-shrink: 0; }
+    .substep-timer-badge.warning { border-color: #d97706; background: #fef3c7; color: #92400e; }
+    .substep-timer-badge.danger { border-color: var(--danger); background: var(--danger-soft); color: var(--danger); }
     .card-topline { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
     .stage-tag { color: #829087; text-transform: uppercase; font-size: 9px; letter-spacing: .11em; font-weight: 800; display: inline-flex; align-items: center; gap: 7px; }
     .stage-tag::before { content: ""; width: 7px; height: 7px; border: 2px solid #9eaea3; border-radius: 50%; background: white; }
@@ -212,7 +268,7 @@
       .section-head { align-items: flex-start; }
       .scroll-hint { font-size: 0; gap: 0; padding-top: 2px; }
       .scroll-hint svg { width: 18px; height: 18px; }
-      .timeline-track { padding: 25px 19px 31px; gap: 38px; min-height: 330px; }
+      .timeline-track { padding: 48px 19px 31px; gap: 38px; min-height: 330px; }
       .milestone-column { flex-basis: 238px; width: 238px; }
       .milestone-column::after { width: 38px; }
       .add-milestone-column { flex-basis: 155px; width: 155px; }
@@ -322,6 +378,48 @@
     </form>
   </dialog>
 
+  <dialog class="modal-dialog" id="timerDialog" aria-labelledby="timerDialogTitle" style="width: min(520px, calc(100vw - 30px));">
+    <div class="modal-form">
+      <div class="modal-head">
+        <p class="modal-eyebrow">Milestone timers</p>
+        <button type="button" class="small-icon-button" id="closeTimerDialogButton" aria-label="Close dialog" title="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+      <h2 class="modal-title" id="timerDialogTitle">Manage timers</h2>
+      <div class="field" style="margin-top:0">
+        <span class="field-label">Start node</span>
+        <div id="timerStartNodeDisplay" style="padding: 10px 12px; background: #f2f6f3; border-radius: 10px; font-size: 13px; font-weight: 650; color: var(--ink); border: 1px solid #dce8df;"></div>
+        <p class="field-hint">All timers start automatically when this node is marked completed.</p>
+      </div>
+
+      <div style="margin-top: 18px;">
+        <span class="field-label">Configured timers</span>
+        <div id="existingTimersList" style="display: flex; flex-direction: column; gap: 7px; margin-top: 7px; max-height: 190px; overflow-y: auto;"></div>
+      </div>
+
+      <form id="addTimerForm" style="margin-top: 18px; padding-top: 15px; border-top: 1px solid var(--line);">
+        <p style="font-size: 11px; font-weight: 750; color: var(--accent); text-transform: uppercase; letter-spacing: .08em; margin: 0 0 10px;">+ Add timer to upcoming node</p>
+        <div style="display: flex; gap: 9px; align-items: flex-end;">
+          <label style="flex: 1; min-width: 0;" for="timerTargetSelect">
+            <span class="field-label" style="font-size: 10px; margin-bottom: 5px;">Target node</span>
+            <select id="timerTargetSelect" required style="width: 100%; border: 1px solid #dfe7e1; border-radius: 10px; padding: 9px 10px; color: var(--ink); background: #fbfcfb; font-size: 12px; outline: none;"></select>
+          </label>
+          <label style="width: 86px; flex-shrink: 0;" for="timerDurationInput">
+            <span class="field-label" style="font-size: 10px; margin-bottom: 5px;">Days</span>
+            <input id="timerDurationInput" name="days" type="number" min="1" max="9999" placeholder="20" required autocomplete="off" style="width: 100%; border: 1px solid #dfe7e1; border-radius: 10px; padding: 9px 10px; color: var(--ink); background: #fbfcfb; font-size: 12px; outline: none;">
+          </label>
+          <button class="btn primary" type="submit" id="addTimerButton" style="padding: 9px 15px; font-size: 11px; flex-shrink: 0; min-width: 64px;">Add</button>
+        </div>
+        <p class="field-hint" style="margin-top: 7px;">Hover countdown will appear over the target node once this start node is completed.</p>
+      </form>
+
+      <div class="modal-actions" style="margin-top: 22px;">
+        <button class="btn primary" type="button" id="doneTimerDialogButton">Done</button>
+      </div>
+    </div>
+  </dialog>
+
   <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="true"></div>
 
   <script>
@@ -360,7 +458,17 @@
         editorNotes: $('#editorNotes'),
         closeDialogButton: $('#closeDialogButton'),
         cancelDialogButton: $('#cancelDialogButton'),
-        toastRegion: $('#toastRegion')
+        toastRegion: $('#toastRegion'),
+        timerDialog: $('#timerDialog'),
+        timerDialogTitle: $('#timerDialogTitle'),
+        timerStartNodeDisplay: $('#timerStartNodeDisplay'),
+        existingTimersList: $('#existingTimersList'),
+        addTimerForm: $('#addTimerForm'),
+        timerTargetSelect: $('#timerTargetSelect'),
+        timerDurationInput: $('#timerDurationInput'),
+        addTimerButton: $('#addTimerButton'),
+        closeTimerDialogButton: $('#closeTimerDialogButton'),
+        doneTimerDialogButton: $('#doneTimerDialogButton')
       };
 
       function makeId() {
@@ -371,6 +479,17 @@
       function cleanNode(node, isMilestone) {
         if (!node || typeof node !== 'object' || typeof node.id !== 'string' || typeof node.title !== 'string') return null;
         const clean = { id: node.id, title: node.title.slice(0, 90), notes: typeof node.notes === 'string' ? node.notes.slice(0, 220) : '' };
+        const rawTimers = Array.isArray(node.timers) ? node.timers : (node.timer ? [node.timer] : []);
+        const validTimers = rawTimers
+          .filter(t => t && typeof t === 'object' && typeof t.targetId === 'string' && Number(t.days) > 0)
+          .map(t => ({
+            id: typeof t.id === 'string' ? t.id : makeId(),
+            targetId: String(t.targetId),
+            days: Math.max(1, Math.min(9999, Math.round(Number(t.days))))
+          }));
+        if (validTimers.length > 0) {
+          clean.timers = validTimers;
+        }
         if (isMilestone) clean.children = Array.isArray(node.children) ? node.children.map(child => cleanNode(child, false)).filter(Boolean) : [];
         return clean;
       }
@@ -401,6 +520,7 @@
 
       let state = loadState();
       let editorContext = null;
+      let timerContext = null;
       let toastTimer = null;
 
       function persist(showError = true) {
@@ -427,7 +547,8 @@
           check: '<path d="m5 12 4 4L19 6"/>',
           edit: '<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L8 18l-4 1 1-4Z"/>',
           trash: '<path d="M3 6h18M8 6V4h8v2m3 0-1 14H6L5 6m4 4v6m6-6v6"/>',
-          arrow: '<path d="M4 12h15M14 6l6 6-6 6"/>'
+          arrow: '<path d="M4 12h15M14 6l6 6-6 6"/>',
+          clock: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>'
         };
         return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name] || ''}</svg>`;
       }
@@ -473,9 +594,204 @@
         return `<div class="node-status"><button class="status-toggle${isDone ? ' done' : ''}" type="button" data-action="toggle-complete" data-id="${escapeHtml(id)}" ${disabled ? 'disabled' : ''} aria-label="${isDone ? 'Mark as not complete' : 'Mark as complete'}: ${escapeHtml(label)}"><span class="status-circle">${isDone ? icon('check') : ''}</span><span>${label}</span></button>${timestamp ? `<span class="completed-at" title="${escapeHtml(timestamp)}">${escapeHtml(timestamp)}</span>` : ''}</div>`;
       }
 
+      function findNode(id, parentId) {
+        if (parentId) {
+          const parent = state.milestones.find(item => item.id === parentId);
+          return parent?.children.find(item => item.id === id) || null;
+        }
+        const m = state.milestones.find(item => item.id === id);
+        if (m) return m;
+        for (const item of state.milestones) {
+          const child = item.children.find(c => c.id === id);
+          if (child) return child;
+        }
+        return null;
+      }
+
+      function getAllNodesInOrder() {
+        const list = [];
+        state.milestones.forEach((m, mIndex) => {
+          list.push({
+            id: m.id,
+            title: m.title,
+            isMilestone: true,
+            milestoneIndex: mIndex,
+            displayLabel: `Milestone ${String(mIndex + 1).padStart(2, '0')}: ${m.title}`,
+            shortLabel: `Milestone ${String(mIndex + 1).padStart(2, '0')}`,
+            node: m
+          });
+          m.children.forEach(c => {
+            list.push({
+              id: c.id,
+              title: c.title,
+              isMilestone: false,
+              milestoneIndex: mIndex,
+              displayLabel: `↳ Sub-milestone: ${c.title} (under M${mIndex + 1})`,
+              shortLabel: `Sub: ${c.title.slice(0, 16)}`,
+              node: c,
+              parentId: m.id
+            });
+          });
+        });
+        return list;
+      }
+
+      function getSubsequentNodes(nodeId) {
+        const all = getAllNodesInOrder();
+        const idx = all.findIndex(item => item.id === nodeId);
+        if (idx === -1) return [];
+        return all.slice(idx + 1);
+      }
+
+      function getNodeTimers(node) {
+        if (!node) return [];
+        if (Array.isArray(node.timers)) return node.timers;
+        if (node.timer && typeof node.timer === 'object' && typeof node.timer.targetId === 'string') return [node.timer];
+        return [];
+      }
+
+      function cleanupTimersForDeletedIds(deletedIds) {
+        const set = new Set(deletedIds);
+        state.milestones.forEach(m => {
+          if (Array.isArray(m.timers)) {
+            m.timers = m.timers.filter(t => !set.has(t.targetId));
+            if (m.timers.length === 0) delete m.timers;
+          } else if (m.timer && set.has(m.timer.targetId)) {
+            delete m.timer;
+          }
+          m.children.forEach(c => {
+            if (Array.isArray(c.timers)) {
+              c.timers = c.timers.filter(t => !set.has(t.targetId));
+              if (c.timers.length === 0) delete c.timers;
+            } else if (c.timer && set.has(c.timer.targetId)) {
+              delete c.timer;
+            }
+          });
+        });
+      }
+
+      function getTimerCalculation(startCompletedAt, durationDays) {
+        const MS_PER_DAY = 24 * 60 * 60 * 1000;
+        const startMs = new Date(startCompletedAt).getTime();
+        if (Number.isNaN(startMs)) return null;
+        const nowMs = Date.now();
+        const durationMs = durationDays * MS_PER_DAY;
+        const dueMs = startMs + durationMs;
+        const remainingMs = dueMs - nowMs;
+
+        let remainingDays;
+        let isOverdue = false;
+        let isDueToday = false;
+
+        if (remainingMs < 0) {
+          isOverdue = true;
+          const overdueDays = Math.floor(Math.abs(remainingMs) / MS_PER_DAY) + 1;
+          remainingDays = -overdueDays;
+        } else {
+          remainingDays = Math.ceil(remainingMs / MS_PER_DAY);
+          if (remainingDays === 0) {
+            isDueToday = true;
+          }
+        }
+
+        return {
+          startMs,
+          nowMs,
+          dueMs,
+          remainingMs,
+          remainingDays,
+          isOverdue,
+          isDueToday
+        };
+      }
+
+      function formatRemainingDays(remainingDays) {
+        if (remainingDays > 1) return `${remainingDays} days left`;
+        if (remainingDays === 1) return `1 day left`;
+        if (remainingDays === 0) return `Due today`;
+        const overdue = Math.abs(remainingDays);
+        return overdue === 1 ? `1 day overdue` : `${overdue} days overdue`;
+      }
+
+      function getActiveTimersForTarget(targetId, company) {
+        if (!company) return [];
+        // Dismissed when target node is completed
+        if (company.progress?.[targetId]?.completedAt) return [];
+
+        const all = getAllNodesInOrder();
+        const active = [];
+
+        all.forEach(item => {
+          const timers = getNodeTimers(item.node);
+          timers.forEach(timer => {
+            if (timer && timer.targetId === targetId) {
+              const startRecord = company.progress?.[item.id];
+              if (startRecord?.completedAt) {
+                const calc = getTimerCalculation(startRecord.completedAt, timer.days);
+                if (calc) {
+                  active.push({
+                    id: timer.id,
+                    startNode: item,
+                    timer,
+                    calc
+                  });
+                }
+              }
+            }
+          });
+        });
+
+        return active;
+      }
+
+      function getStartNodeTimersInfo(node, company) {
+        const timers = getNodeTimers(node);
+        if (timers.length === 0) return [];
+        const all = getAllNodesInOrder();
+        const isStartDone = Boolean(company?.progress?.[node.id]?.completedAt);
+
+        return timers.map(timer => {
+          const targetItem = all.find(item => item.id === timer.targetId);
+          const targetLabel = targetItem ? targetItem.shortLabel : 'Upcoming step';
+          const targetFull = targetItem ? targetItem.displayLabel : 'Upcoming step';
+          const isTargetDone = targetItem ? Boolean(company?.progress?.[targetItem.id]?.completedAt) : false;
+
+          if (isTargetDone) {
+            return {
+              id: timer.id,
+              status: 'completed',
+              text: `Timer: ${timer.days}d → ${targetLabel} (Target completed)`,
+              title: `${targetFull} is complete. Timer dismissed.`
+            };
+          }
+
+          if (isStartDone) {
+            const calc = getTimerCalculation(company.progress[node.id].completedAt, timer.days);
+            const remainingText = calc ? formatRemainingDays(calc.remainingDays) : `${timer.days}d`;
+            return {
+              id: timer.id,
+              status: 'running',
+              text: `Timer: ${targetLabel} (${remainingText})`,
+              title: `Timer running on ${targetFull}. Started ${formatIndiaDate(company.progress[node.id].completedAt)}. ${remainingText}.`
+            };
+          }
+
+          return {
+            id: timer.id,
+            status: 'pending',
+            text: `Timer: ${timer.days}d → ${targetLabel} (on completion)`,
+            title: `Will start a ${timer.days}-day timer on ${targetFull} once this step is marked complete.`
+          };
+        });
+      }
+
       function milestoneMenuMarkup(id) {
+        const milestone = state.milestones.find(item => item.id === id);
+        const timers = getNodeTimers(milestone);
+        const timerLabel = timers.length === 0 ? 'Add timer' : (timers.length === 1 ? 'Manage timers (1)' : `Manage timers (${timers.length})`);
         return `<div class="popover-menu node-menu" data-menu-for="milestone-${escapeHtml(id)}" hidden>
           <button type="button" data-action="edit-milestone" data-id="${escapeHtml(id)}">Edit milestone</button>
+          <button type="button" data-action="manage-timers" data-id="${escapeHtml(id)}">${timerLabel}</button>
           <button type="button" data-action="insert-milestone-before" data-id="${escapeHtml(id)}">Insert milestone before</button>
           <button type="button" data-action="insert-milestone-after" data-id="${escapeHtml(id)}">Insert milestone after</button>
           <button type="button" data-action="add-substep" data-parent-id="${escapeHtml(id)}">Add sub-milestone</button>
@@ -484,8 +800,13 @@
       }
 
       function substepMenuMarkup(id, parentId) {
+        const parent = state.milestones.find(item => item.id === parentId);
+        const child = parent?.children.find(item => item.id === id);
+        const timers = getNodeTimers(child);
+        const timerLabel = timers.length === 0 ? 'Add timer' : (timers.length === 1 ? 'Manage timers (1)' : `Manage timers (${timers.length})`);
         return `<div class="popover-menu" data-menu-for="substep-${escapeHtml(id)}" hidden>
           <button type="button" data-action="edit-substep" data-id="${escapeHtml(id)}" data-parent-id="${escapeHtml(parentId)}">Edit sub-milestone</button>
+          <button type="button" data-action="manage-timers" data-id="${escapeHtml(id)}" data-parent-id="${escapeHtml(parentId)}">${timerLabel}</button>
           <button type="button" data-action="insert-substep-before" data-id="${escapeHtml(id)}" data-parent-id="${escapeHtml(parentId)}">Insert before</button>
           <button type="button" data-action="insert-substep-after" data-id="${escapeHtml(id)}" data-parent-id="${escapeHtml(parentId)}">Insert after</button>
           <button type="button" class="danger" data-action="delete-substep" data-id="${escapeHtml(id)}" data-parent-id="${escapeHtml(parentId)}">Delete sub-milestone</button>
@@ -494,14 +815,59 @@
 
       function renderMilestone(milestone, index, company) {
         const isDone = Boolean(company?.progress?.[milestone.id]?.completedAt);
+        const activeIncomingTimers = getActiveTimersForTarget(milestone.id, company);
+        const hoverBadgesMarkup = activeIncomingTimers.length > 0 ? `
+          <div class="milestone-hover-timers" aria-label="Active timers">
+            ${activeIncomingTimers.map(t => {
+              let stateClass = '';
+              if (t.calc.isOverdue) stateClass = ' danger';
+              else if (t.calc.isDueToday || t.calc.remainingDays <= 3) stateClass = ' warning';
+              const label = formatRemainingDays(t.calc.remainingDays);
+              const tip = `Timer: ${t.timer.days} days allocated from ${t.startNode.displayLabel} (completed ${formatIndiaDate(company.progress[t.startNode.id].completedAt)}). ${label}.`;
+              return `<div class="timer-hover-pill${stateClass}" title="${escapeHtml(tip)}">
+                <span class="timer-pill-left">${icon('clock')} <span>${escapeHtml(label)}</span></span>
+                <span class="timer-pill-source">from ${escapeHtml(t.startNode.shortLabel)}</span>
+              </div>`;
+            }).join('')}
+          </div>
+        ` : '';
+
+        const startTimersInfo = getStartNodeTimersInfo(milestone, company);
+        const startTimerMarkup = startTimersInfo.length > 0 ? `
+          <div class="node-timers-stack">
+            ${startTimersInfo.map(info => `
+              <div class="node-timer-tag is-${info.status}" title="${escapeHtml(info.title)}">
+                ${info.status === 'completed' ? icon('check') : icon('clock')}
+                <span>${escapeHtml(info.text)}</span>
+              </div>
+            `).join('')}
+          </div>
+        ` : '';
+
         const children = milestone.children.map(child => {
           const childDone = Boolean(company?.progress?.[child.id]?.completedAt);
           const stamp = childDone ? formatIndiaDate(company.progress[child.id].completedAt) : '';
+          const childIncoming = getActiveTimersForTarget(child.id, company);
+          const childIncomingMarkup = childIncoming.length > 0 ? childIncoming.map(t => {
+            let stateClass = '';
+            if (t.calc.isOverdue) stateClass = ' danger';
+            else if (t.calc.isDueToday || t.calc.remainingDays <= 3) stateClass = ' warning';
+            const label = formatRemainingDays(t.calc.remainingDays);
+            return `<div class="substep-timer-badge${stateClass}" title="Timer started from ${escapeHtml(t.startNode.displayLabel)}">${icon('clock')} <span>${escapeHtml(label)} (from ${escapeHtml(t.startNode.shortLabel)})</span></div>`;
+          }).join('') : '';
+
+          const childStartTimers = getStartNodeTimersInfo(child, company);
+          const childStartMarkup = childStartTimers.length > 0 ? childStartTimers.map(info => `
+            <div class="substep-timer-badge" title="${escapeHtml(info.title)}">${info.status === 'completed' ? icon('check') : icon('clock')} <span>${escapeHtml(info.text)}</span></div>
+          `).join('') : '';
+
           return `<li class="substep-card${childDone ? ' is-complete' : ''}">
             ${statusMarkup(child.id, company, true)}
             <div class="substep-main">
               <p class="substep-title">${escapeHtml(child.title)}</p>
               ${child.notes ? `<p class="substep-note">${escapeHtml(child.notes)}</p>` : ''}
+              ${childIncomingMarkup}
+              ${childStartMarkup}
               ${stamp ? `<p class="substep-time">${escapeHtml(stamp)}</p>` : ''}
             </div>
             <div class="substep-actions menu-anchor">
@@ -512,7 +878,8 @@
         }).join('');
 
         return `<article class="milestone-column" data-milestone-id="${escapeHtml(milestone.id)}">
-          <div class="milestone-card${isDone ? ' is-complete' : ''}">
+          <div class="milestone-card${isDone ? ' is-complete' : ''}${activeIncomingTimers.length > 0 ? ' has-active-timer' : ''}">
+            ${hoverBadgesMarkup}
             <div class="card-topline">
               <span class="stage-tag">Milestone ${String(index + 1).padStart(2, '0')}</span>
               <div class="menu-anchor">
@@ -522,6 +889,7 @@
             </div>
             <h3 class="node-title">${escapeHtml(milestone.title)}</h3>
             ${milestone.notes ? `<p class="node-note">${escapeHtml(milestone.notes)}</p>` : ''}
+            ${startTimerMarkup}
             ${statusMarkup(milestone.id, company)}
           </div>
           <div class="substep-section">
@@ -650,6 +1018,127 @@
         state.companies.forEach(company => ids.forEach(id => { delete company.progress[id]; }));
       }
 
+      function openTimerManager(id, parentId) {
+        const node = findNode(id, parentId);
+        if (!node) return;
+        const subsequent = getSubsequentNodes(id);
+        if (subsequent.length === 0) {
+          showToast('Cannot add timer on the last node (no upcoming nodes to target).', 'warning');
+          return;
+        }
+        timerContext = { id, parentId };
+        const all = getAllNodesInOrder();
+        const currentItem = all.find(item => item.id === id);
+
+        els.timerDialogTitle.textContent = 'Manage timers';
+        els.timerStartNodeDisplay.textContent = currentItem ? currentItem.displayLabel : (node.title || 'Start step');
+
+        els.timerTargetSelect.innerHTML = subsequent.map(target => {
+          return `<option value="${escapeHtml(target.id)}">${escapeHtml(target.displayLabel)}</option>`;
+        }).join('');
+        els.timerDurationInput.value = '20';
+
+        renderExistingTimersList(node, subsequent);
+        els.timerDialog.showModal();
+        window.setTimeout(() => els.timerDurationInput.focus(), 0);
+      }
+
+      function renderExistingTimersList(node, subsequent = null) {
+        if (!subsequent) subsequent = getSubsequentNodes(node.id);
+        const all = getAllNodesInOrder();
+        const timers = getNodeTimers(node);
+        const company = getSelectedCompany();
+        const startDone = Boolean(company?.progress?.[node.id]?.completedAt);
+
+        if (timers.length === 0) {
+          els.existingTimersList.innerHTML = `<div style="font-size: 11px; color: var(--muted); padding: 12px; text-align: center; border: 1px dashed #cad8ce; border-radius: 9px; background: #f9fbf9;">No timers set yet for this node. Add your first timer below.</div>`;
+          return;
+        }
+
+        els.existingTimersList.innerHTML = timers.map(timer => {
+          const targetItem = all.find(item => item.id === timer.targetId);
+          const targetTitle = targetItem ? targetItem.displayLabel : 'Upcoming step';
+          const targetDone = targetItem && Boolean(company?.progress?.[targetItem.id]?.completedAt);
+          let statusText = 'Pending (starts when start step is completed)';
+          let statusColor = '#718078';
+
+          if (targetDone) {
+            statusText = 'Target completed · Timer dismissed';
+            statusColor = '#718078';
+          } else if (startDone) {
+            const calc = getTimerCalculation(company.progress[node.id].completedAt, timer.days);
+            const remaining = calc ? formatRemainingDays(calc.remainingDays) : `${timer.days} days`;
+            statusText = `Active · ${remaining}`;
+            statusColor = calc?.isOverdue ? 'var(--danger)' : 'var(--accent)';
+          }
+
+          return `<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 12px; border: 1px solid #dce8df; border-radius: 9px; background: #fff;">
+            <div style="min-width: 0; flex: 1;">
+              <div style="font-size: 12px; font-weight: 700; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${timer.days} days → ${escapeHtml(targetTitle)}</div>
+              <div style="font-size: 10px; font-weight: 600; color: ${statusColor}; margin-top: 2px;">${escapeHtml(statusText)}</div>
+            </div>
+            <button type="button" class="small-icon-button" data-action="remove-single-timer" data-timer-id="${escapeHtml(timer.id)}" aria-label="Remove timer" title="Remove timer" style="color: var(--danger); border-color: #f0c8c8; flex-shrink: 0;">${icon('trash')}</button>
+          </div>`;
+        }).join('');
+      }
+
+      function closeTimerDialog() {
+        els.timerDialog.close();
+        timerContext = null;
+        els.addTimerForm.reset();
+      }
+
+      function addTimerToNode(event) {
+        event.preventDefault();
+        if (!timerContext) return;
+        const node = findNode(timerContext.id, timerContext.parentId);
+        if (!node) return;
+        const targetId = els.timerTargetSelect.value;
+        const days = parseInt(els.timerDurationInput.value, 10);
+        if (!targetId || Number.isNaN(days) || days < 1) {
+          showToast('Please enter a valid duration in days (at least 1).', 'warning');
+          return;
+        }
+
+        if (!Array.isArray(node.timers)) {
+          node.timers = node.timer ? [node.timer] : [];
+          delete node.timer;
+        }
+
+        const existingIndex = node.timers.findIndex(t => t.targetId === targetId);
+        if (existingIndex >= 0) {
+          node.timers[existingIndex].days = Math.min(9999, days);
+          showToast(`Updated timer for target step to ${days} days.`);
+        } else {
+          node.timers.push({
+            id: makeId(),
+            targetId,
+            days: Math.min(9999, days)
+          });
+          showToast(`Timer added for ${days} days.`);
+        }
+
+        persist();
+        renderExistingTimersList(node);
+        render();
+      }
+
+      function removeSingleTimer(timerId) {
+        if (!timerContext) return;
+        const node = findNode(timerContext.id, timerContext.parentId);
+        if (!node) return;
+        if (Array.isArray(node.timers)) {
+          node.timers = node.timers.filter(t => t.id !== timerId);
+          if (node.timers.length === 0) delete node.timers;
+        } else if (node.timer) {
+          delete node.timer;
+        }
+        persist();
+        renderExistingTimersList(node);
+        render();
+        showToast('Timer removed.');
+      }
+
       function toggleCompletion(id) {
         const company = getSelectedCompany();
         if (!company) { showToast('Add a company before tracking completion.', 'warning'); return; }
@@ -680,6 +1169,7 @@
           openEditor({ type: 'milestone', mode: 'create', index: state.milestones.length });
           return;
         }
+        if (action === 'manage-timers') { openTimerManager(id, parentId); return; }
         if (action === 'toggle-complete') { toggleCompletion(id); return; }
         if (action === 'edit-milestone') { openEditor({ type: 'milestone', mode: 'edit', id }); return; }
         if (action === 'insert-milestone-before' || action === 'insert-milestone-after') {
@@ -706,6 +1196,7 @@
           if (!confirmed) return;
           state.milestones = state.milestones.filter(item => item.id !== id);
           removeProgressRecords([id, ...milestone.children.map(child => child.id)]);
+          cleanupTimersForDeletedIds([id, ...milestone.children.map(child => child.id)]);
           persist(); render(); showToast('Milestone deleted.');
           return;
         }
@@ -716,6 +1207,7 @@
           if (!window.confirm(`Delete sub-milestone “${child.title}”? Its completion records will be removed from every company.`)) return;
           parent.children = parent.children.filter(item => item.id !== id);
           removeProgressRecords([id]);
+          cleanupTimersForDeletedIds([id]);
           persist(); render(); showToast('Sub-milestone deleted.');
         }
       }
@@ -773,6 +1265,25 @@
       els.editorDialog.addEventListener('click', event => {
         if (event.target === els.editorDialog) closeEditor();
       });
+
+      els.addTimerForm.addEventListener('submit', addTimerToNode);
+      els.existingTimersList.addEventListener('click', event => {
+        const btn = event.target.closest('button[data-action="remove-single-timer"]');
+        if (btn) removeSingleTimer(btn.dataset.timerId);
+      });
+      els.closeTimerDialogButton.addEventListener('click', closeTimerDialog);
+      els.doneTimerDialogButton.addEventListener('click', closeTimerDialog);
+      els.timerDialog.addEventListener('click', event => {
+        if (event.target === els.timerDialog) closeTimerDialog();
+      });
+
+      function refreshTimersIfIdle() {
+        if (els.editorDialog.open || els.timerDialog.open) return;
+        const anyMenuOpen = Array.from(document.querySelectorAll('.popover-menu')).some(m => !m.hidden);
+        if (anyMenuOpen) return;
+        render();
+      }
+      window.setInterval(refreshTimersIfIdle, 60000);
 
       render();
     })();
